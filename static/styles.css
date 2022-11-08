@@ -1,0 +1,101 @@
+
+body {
+	background: #3a3d36;
+	color: #ffffff;
+}
+
+a {
+	margin-bottom: 10px;
+	margin-left: 100px;
+	color:#aee8b4;
+	font-family: consolas;
+}
+
+#searchWord {
+	margin-left: 2px;
+	margin-right: 2px;
+	color:#d4a524;
+	font-family: consolas;
+	text-decoration: none;
+}
+
+#header, #container, #buttons, #message, #categories, table, #searchDB, .results-num {
+	margin-bottom: 10px;
+	margin-left: 100px;
+	margin-right: 100px;
+	font-family: consolas;
+	
+	}
+
+#header {
+	margin-top: 40px;
+	color: #aee8b4
+}
+
+#buttons {
+	margin-top:20px;
+	margin-bottom:20px
+}
+
+#check {
+	margin-left:50px
+}
+
+.success {
+	color: #66e058;
+	font-weight: bold;
+	}
+
+.fail {
+	color: #f5f53b;
+	font-weight: bold;
+	}
+
+.nail {
+	color: #8bebf0;
+	font-weight: bold	
+}
+
+#container, #category {
+	display: none
+}
+
+#question {
+	font-weight: bold;
+	font-size: 20px
+}
+	
+#message{
+	font-size: 20px;
+}
+
+button {
+	font-size: 18px;
+}
+
+label[for], input[type='radio'], #category {
+	margin: 15px 5px 10px;
+	font-size: 20px;
+	/* line-height: 1.6 */
+	}
+
+table {
+  border-collapse: collapse;
+  width: 85%;
+  font-size: 20px;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+  color: black
+}
+
+#searchDB, .results-num {
+	font-size: 20px;
+}

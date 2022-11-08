@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>French Quiz</title>
+		<link rel='stylesheet' href='{{ url_for("static", filename="styles.css") }}'>
+	</head>
+	
+	<body>
+		<a href='{{ url_for("index") }}'>Categories</a>
+		<a href='{{ url_for("masc_fem") }}'>Masculin/Feminin</a>
+		
+		<h2 id="header">Masculin/Feminin Test</h2>
+				
+		<div id="container">
+			<p id="question">Est-ce que <a id ="searchWord" href="#">some word</a> est masculin ou feminin?</p>
+			
+			<div id="radios">
+					<input id="answer1" type="radio" name="quiz" value="un">
+					<label for="answer1">un</label><br>
+					
+					<input id="answer2" type="radio" name="quiz" value="une">
+					<label for="answer2">une</label><br>
+			</div>
+		</div>
+		
+		<div id="buttons">
+			<button id="start">Start Quiz</button>
+			<button id="check">Check Answer</button>
+		</div>
+		
+		<div id="message"></div>	
+		
+		
+		<div class="search">
+			<div id="searchResult"></div>
+		</div>
+
+		
+		<script src="{{ url_for('static', filename='jquery-1.11.0.js') }}"></script>
+		<script src="{{ url_for('static', filename='script_masc_fem.js') }}"></script>
+	</body>
+	
+</html>

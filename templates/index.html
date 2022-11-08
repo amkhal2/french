@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>French Quiz</title>
+		<link rel='stylesheet' href='{{ url_for("static", filename="styles.css") }}'>
+	</head>
+	
+	<body>
+		<a href='{{ url_for("index") }}'>Categories</a>
+		<a href='{{ url_for("masc_fem") }}'>Masculin/Feminin</a>
+		
+		<h2 id="header">French Quiz App</h2>
+				
+		<div id="container">
+			<p id="question">Question?</p>
+			
+			<div id="radios">
+				<!-- Empty div for answers radiobuttons -->
+			</div>
+		</div>
+		
+		<div id="categories">
+			<select name="category" id="category">
+				<!-- Empty selectbox container -->
+			</select>
+		</div>
+		
+		<div id="buttons">
+			<button id="start">Start Quiz</button>
+			<button id="check">Check Answer</button>
+		</div>
+		
+		<div id="message"></div>
+		
+		<div class="search">
+			<input type="text" id="searchDB" placeholder="Search Dictionary">
+			<div id="searchResult"></div>
+		</div>
+		
+		<script src="{{ url_for('static', filename='jquery-1.11.0.js') }}"></script>
+		<script src="{{ url_for('static', filename='script.js') }}"></script>
+	</body>
+	
+</html>
