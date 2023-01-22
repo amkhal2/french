@@ -99,3 +99,7 @@ tr:nth-child(even) {
 #searchDB, .results-num {
 	font-size: 20px;
 }
+
+span {
+	color: #e6564c;
+}

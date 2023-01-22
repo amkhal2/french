@@ -51,7 +51,7 @@ $(function(){
 		xhr.onload = function(){
 			if (xhr.status === 200) {
 				data = JSON.parse(xhr.responseText);
-				$('#question').html('What is the meaning of "' + data.question + '"?');
+				$('#question').html('What is the meaning of "<span>' + data.question + '</span>"?');
 				
 				var radios = ''
 				// Make questions radiobuttons 
