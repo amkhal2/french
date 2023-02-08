@@ -61,6 +61,8 @@ $(function(){
 					radios += data.answers[i].answer + '</label><br>';
 				}
 				$('#radios').html(radios) 
+				var q = document.getElementById('question');
+				q.scrollIntoView();
 				
 				questionID = data.questionID;
 							
