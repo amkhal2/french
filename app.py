@@ -1,8 +1,14 @@
 from flask import Flask, render_template, jsonify, request
 from excel import get_rows
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.functions import ReturnTypeFromArgs  # to be able to query letters with accents in db
 import os, random
 from itertools import cycle  # to go throw category list items continuosly
+
+# use this class to unaccent the words having accents to search db
+class unaccent(ReturnTypeFromArgs): 
+    pass
+        
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -158,7 +164,7 @@ def search_Database():
     data = request.get_json()
     
     if data["userInput"].strip(): 
-        results = French.query.filter(French.word.like(f'%{data["userInput"]}%')).all()
+        results = French.query.filter(French.word.like(f'%{data["userInput"]}%') | French.meaning.like(f'%{data["userInput"]}%')).all()
         
         l = [[i.word, i.cat, i.meaning] for i in results]
         
