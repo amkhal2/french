@@ -3,6 +3,7 @@ from excel import get_rows
 from flask_sqlalchemy import SQLAlchemy
 import os, random
 from itertools import cycle  # to go throw category list items continuosly
+from unidecode import unidecode # to remove the french accents from string in db
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -18,12 +19,22 @@ excel_file = r"Mon Dictionnaire.xlsx"
 # excel_file = r"D:\Languages\learn french\Mon Dictionnaire.xlsx"
 # excel_file = r"d:\Mon Dictionnaire.xlsx"
 
+def unaccent_word(context):
+    # This funciton will remove the accents from 'word' column
+    return unidecode(context.current_parameters['word'])
+
+def unaccent_meaning(context):
+    # This funciton will remove the accents from 'meaning' column
+    return unidecode(context.current_parameters['meaning'])
+
 # Create database table using SQLAlchemy
 class French(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String, unique=True)
+    word_unaccented = db.Column(db.String, default=unaccent_word, onupdate=unaccent_word, index=True) # unaccented 'word' column will be created by default
     cat = db.Column(db.String)
     meaning = db.Column(db.String)
+    meaning_unaccented = db.Column(db.String, default=unaccent_meaning , onupdate=unaccent_meaning) # unaccented 'meaning' column will be created by default
 
 ## 1) CREATE THE DATABASE: Run Python shell with "python" command --->
 ##    import db with "from app import db" ---> creat db with "db.create_all()"
@@ -157,8 +168,8 @@ def check_answer():
 def search_Database():
     data = request.get_json()
     
-    if data["userInput"].strip(): 
-        results = French.query.filter(French.word.like(f'%{data["userInput"]}%') | French.meaning.like(f'%{data["userInput"]}%')).all()
+    if data["userInput"].strip() and len(data["userInput"].strip()) > 1: 
+        results = French.query.filter(French.word_unaccented.like(f'%{unidecode(data["userInput"])}%') | French.meaning_unaccented.like(f'%{unidecode(data["userInput"])}%')).all()
         
         l = [[i.word, i.cat, i.meaning] for i in results]
         
