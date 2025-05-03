@@ -1,7 +1,9 @@
 
-body {
-	background: #3a3d36;
-	color: #ffffff;
+
+.navigation > a {
+	color: black;
+	font-size: 20px;
+	font-weight: bold;
 }
 
 a {
@@ -29,7 +31,7 @@ a {
 
 #header {
 	margin-top: 40px;
-	color: #aee8b4
+	color: navy;
 }
 
 #buttons {
@@ -42,23 +44,20 @@ a {
 }
 
 .success {
-	color: #66e058;
+	color: #05a30d;
 	font-weight: bold;
 	}
 
 .fail {
-	color: #f5f53b;
+	color: orange;
 	font-weight: bold;
 	}
 
 .nail {
-	color: #8bebf0;
+	color: #8c0373;
 	font-weight: bold	
 }
 
-#container, #category {
-	display: none
-}
 
 #question {
 	font-weight: bold;

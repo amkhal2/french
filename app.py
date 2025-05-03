@@ -31,10 +31,12 @@ def unaccent_meaning(context):
 class French(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String, unique=True)
-    word_unaccented = db.Column(db.String, default=unaccent_word, onupdate=unaccent_word, index=True) # unaccented 'word' column will be created by default
+    # unaccented 'word' column will be created by default
+    word_unaccented = db.Column(db.String, default=unaccent_word, onupdate=unaccent_word, index=True) 
     cat = db.Column(db.String)
     meaning = db.Column(db.String)
-    meaning_unaccented = db.Column(db.String, default=unaccent_meaning , onupdate=unaccent_meaning) # unaccented 'meaning' column will be created by default
+    # unaccented 'meaning' column will be created by default
+    meaning_unaccented = db.Column(db.String, default=unaccent_meaning , onupdate=unaccent_meaning, index=True) 
 
 ## 1) CREATE THE DATABASE: Run Python shell with "python" command --->
 ##    import db with "from app import db" ---> creat db with "db.create_all()"
@@ -76,7 +78,6 @@ def get_categories():
     return catsList
 
 
-
 @app.route('/')
 def index():
     # show errors while filling the database (line 29 above)
@@ -88,22 +89,7 @@ def index():
 def masc_fem():
 
     return render_template('masc_fem.html')
-
-
-@app.route('/get_masc_fem')
-def get_masc_fem():
-    
-    cat = random.choice(['un', 'une'])
-    query = db.engine.execute('''select id, word, cat from French where cat=? 
-                    order by random() limit 1 ''', (cat,))
-    
-    r = [(i[0], i[1], i[2]) for i in query]
-    
-    id, question, answer = r[0][0], r[0][1], r[0][2]
-    
-    data = {"question": question, "questionID": id, "answer": answer}
-    return jsonify(data)
-    
+   
 
 @app.route('/get_cats')
 def categories():
@@ -145,25 +131,7 @@ def get_quiz():
     
     return jsonify(data)
 
-
-correctIDs = []
-@app.route('/check_answer', methods=['POST'])
-def check_answer():
-    global correctIDs, questionID
-    
-    data = request.get_json()
-        
-    if questionID == data["answerID"]:
-        if questionID not in correctIDs: correctIDs.append(questionID)
-        
-        return jsonify({'feedback': 'correct', 
-                         'message': f'Good Job :)! You have {len(correctIDs)} correct answers.'})
-    
-    correctIDs = []
-    return jsonify({'feedback': 'wrong',
-                     'message': 'Wrong answer! Try Again!'})
-    
-
+   
 @app.route('/search_Database', methods=['POST'])
 def search_Database():
     data = request.get_json()
@@ -171,23 +139,39 @@ def search_Database():
     if data["userInput"].strip() and len(data["userInput"].strip()) > 1: 
         results = French.query.filter(French.word_unaccented.like(f'%{unidecode(data["userInput"])}%') | French.meaning_unaccented.like(f'%{unidecode(data["userInput"])}%')).all()
         
-        l = [[i.word, i.cat, i.meaning] for i in results]
+        l = [[i.id, i.word, i.cat, i.meaning] for i in results]
+        if l:
+            return jsonify({"res": l, 'status':'success'})
         
-        return jsonify({"response": l})
-   
-    return jsonify({"response": 'No results!'})
+    return jsonify({"res": 'No results found!'})
+
+
+@app.route('/get_masc_fem')
+def get_masc_fem():
+    
+    cat = random.choice(['un', 'une'])
+    query = db.engine.execute('''select id, word, cat from French where cat=? 
+                    order by random() limit 1 ''', (cat,))
+    
+    r = [(i[0], i[1], i[2]) for i in query]
+    
+    id, question, answer = r[0][0], r[0][1], r[0][2]
+    
+    data = {"question": question, "questionID": id, "answer": answer}
+    return jsonify(data)
 
 
 @app.route('/find_word', methods=['POST'])
 def find_word():
     data = request.get_json()
     
-    if data["userInput"].strip(): 
-        results = French.query.filter_by(word=data["userInput"]).first()
+    if data["clickedWord"].strip(): 
+        results = French.query.filter_by(word=data["clickedWord"]).first()
         
-        return jsonify({"word": results.word, "cat": results.cat, "meaning": results.meaning})
+        return jsonify({"id": results.id, "word": results.word, "cat": results.cat, "meaning": results.meaning})
    
     return jsonify({"response": 'No results!'})
+    
    
 if __name__ == "__main__":
     app.run(debug=True)

@@ -6,8 +6,10 @@
 	</head>
 	
 	<body>
-		<a href='{{ url_for("index") }}'>Categories</a>
-		<a href='{{ url_for("masc_fem") }}'>Masculin/Feminin</a>
+		<div class='navigation'>
+			<a href='{{ url_for("index") }}'>Categories</a>
+			<a href='{{ url_for("masc_fem") }}'>Masculin/Feminin</a>
+		</div>
 		
 		<h2 id="header">Masculin/Feminin Test</h2>
 				
@@ -36,7 +38,7 @@
 		</div>
 
 		
-		<script src="{{ url_for('static', filename='jquery-1.11.0.js') }}"></script>
+		
 		<script src="{{ url_for('static', filename='script_masc_fem.js') }}"></script>
 	</body>
 	
