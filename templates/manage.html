@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Manage Records</title>
+		<link rel="stylesheet" href='{{ url_for("static", filename="styles.css") }}'>
+	</head>
+	
+	<body>
+		<div class='navigation'>
+			<a href='{{ url_for("index") }}'>Categories</a>
+			<a href='{{ url_for("masc_fem") }}'>Masculin/Feminin</a>
+			<a href='{{ url_for("manage") }}'>Manage Records</a>
+		</div>
+						
+		<div class="container">
+			<div id="buttons">
+				<input type="button" id="find" value="Find">
+				<input type="button" id="clear" value="Clear">
+				<input type="button" id="update" value="Update">
+				<input type="button" id="add" value="Add">
+			</div>
+			
+			<div id="msg"></div>
+			<br/>
+			
+			<input type = "text" id="db_id" placeholder="id"> 
+			
+			
+			<textarea id="word" placeholder="word" cols="100" rows="3"></textarea>
+			<input type="button" id="searchDB" value="SearchDB">
+			<div id='result'></div>
+			
+			
+			<select name="category" id="categoryList" >
+				<!-- <option value="adj.">adj.</option> -->
+				<!-- <option value="verbe">verbe</option> -->
+			</select>
+			
+
+			<textarea id="meaning" placeholder="meaning" cols="100" rows="15"></textarea> 
+			
+			
+		</div>
+	
+		<script src="{{ url_for('static', filename='manage.js') }}"></script>
+	</body>
+
+
+</html>

@@ -118,7 +118,7 @@ checkButton.addEventListener('click', function(){
 	
 	
 	
-});
+}, false);
 
 // Search box feature, searching while you type
 

@@ -40,7 +40,7 @@ startButton.addEventListener('click', function(){
 			}
 		}
 			
-});
+}, false);
 
 
 // when the user clicks the word, its meaning will be shown
@@ -68,7 +68,7 @@ word.addEventListener('click', function(){
 				}
 			}
 	
-});
+}, false);
 
 // The selected answer will be checked when the user clicks the button
 checkButton.addEventListener('click', function(){
@@ -89,4 +89,4 @@ checkButton.addEventListener('click', function(){
 	}	
 	
 	
-});
+}, false);

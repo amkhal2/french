@@ -21,6 +21,8 @@ excel_file = r"Mon Dictionnaire.xlsx"
 
 def unaccent_word(context):
     # This funciton will remove the accents from 'word' column
+    # The 'context' is an internal SQLAlchemy object which contains all information about the statement 
+    # being executed, including its source expression, the parameters associated with it  and the cursor.
     return unidecode(context.current_parameters['word'])
 
 def unaccent_meaning(context):
@@ -32,11 +34,11 @@ class French(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String, unique=True)
     # unaccented 'word' column will be created by default
-    word_unaccented = db.Column(db.String, default=unaccent_word, onupdate=unaccent_word, index=True) 
+    word_unaccented = db.Column(db.String, default=unaccent_word, index=True) 
     cat = db.Column(db.String)
     meaning = db.Column(db.String)
     # unaccented 'meaning' column will be created by default
-    meaning_unaccented = db.Column(db.String, default=unaccent_meaning , onupdate=unaccent_meaning, index=True) 
+    meaning_unaccented = db.Column(db.String, default=unaccent_meaning) 
 
 ## 1) CREATE THE DATABASE: Run Python shell with "python" command --->
 ##    import db with "from app import db" ---> creat db with "db.create_all()"
@@ -89,6 +91,10 @@ def index():
 def masc_fem():
 
     return render_template('masc_fem.html')
+
+@app.route('/manage')
+def manage():
+    return render_template('manage.html')
    
 
 @app.route('/get_cats')
@@ -165,13 +171,56 @@ def get_masc_fem():
 def find_word():
     data = request.get_json()
     
-    if data["clickedWord"].strip(): 
-        results = French.query.filter_by(word=data["clickedWord"]).first()
-        
-        return jsonify({"id": results.id, "word": results.word, "cat": results.cat, "meaning": results.meaning})
-   
-    return jsonify({"response": 'No results!'})
+    result = French.query.filter_by(word=data["clickedWord"]).first()
+    if result:
+        return jsonify({"response": "success","id": result.id, "word": result.word, "cat": result.cat, "meaning": result.meaning})
+    else:
+        return jsonify({"response": "No results found!" })
+
+@app.route("/add_record", methods=['POST'])
+def add_record():
+    # when the user clicks the "add" button
+    data = request.get_json()
+    entry = French(word=data['word'], cat=data['cat'], meaning=data['meaning'])
+    db.session.add(entry)
     
+    try:
+        db.session.commit()
+        db.session.refresh(entry)
+        return jsonify({ 'res': 'Record successfully added to database :-)',
+                        'id': entry.id
+        })
+        
+    except Exception as e:
+        return jsonify({ 'res': f'Error while writing record to db: {e}' })  
+
+@app.route("/find_record", methods=['POST'])
+def find_record():
+    # when user clicks the find button
+    data = request.get_json()
+    db_id = int(data["id"])
+    result = French.query.filter_by(id=db_id).first()    
+    to_client = [result.word, result.cat, result.meaning, result.id] 
+
+        
+    return jsonify({'res': to_client})
+
+@app.route('/update_record', methods = ['POST'])
+def update_record():
+    # when clicking "update" button
+    data = request.get_json()
+    id = data['id']
+    word = data['word']
+    cat = data['cat']
+    meaning = data['meaning']
+    word_u = unidecode(word)
+    meaning_u = unidecode(meaning)
+    
+    db.engine.execute('update French set word = ?, cat = ?, meaning = ?, word_unaccented=?, meaning_unaccented=?  where id = ?',
+                            (word, cat, meaning, word_u, meaning_u , id))
+    return jsonify({
+        'res': 'Record updated Successfully!'
+         })
    
 if __name__ == "__main__":
     app.run(debug=True)
