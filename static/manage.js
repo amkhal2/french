@@ -93,19 +93,27 @@ findButton.addEventListener('click', function(){
 			xhr.onload = function(){
 				if(xhr.status === 200){
 					data = JSON.parse(xhr.responseText);
-					
-					word.value = data['res'][0];
-					// set the selectBox option to the found word category
-					for (var i=0; i < categorySelectBox.options.length; i++) {
-						if (data['res'][1] === categorySelectBox.options[i].text) {
-							categorySelectBox.selectedIndex = i;
-							console.log(categorySelectBox.options[categorySelectBox.selectedIndex].text);
+					// if the id isn't found in database
+					if (data['res'].length == 1) { 
+						msg.textContent = data['res'][0];
+						word.value = '';
+						categorySelectBox.selectedIndex = -1; // set the select option to no value
+						meaning.value = '';	
+						result.innerHTML = '';
+					} else {
+						word.value = data['res'][0];
+						// set the selectBox option to the found word category
+						for (var i=0; i < categorySelectBox.options.length; i++) {
+							if (data['res'][1] === categorySelectBox.options[i].text) {
+								categorySelectBox.selectedIndex = i;
+								console.log(categorySelectBox.options[categorySelectBox.selectedIndex].text);
+							}
+							
 						}
+						meaning.value = data['res'][2];
 						
+						msg.textContent = 'Data successfully received from server.';
 					}
-					meaning.value = data['res'][2];
-					
-					msg.textContent = 'Data successfully received from server.';
 				}
 			}
 		} else {
@@ -136,7 +144,7 @@ updateButton.addEventListener('click', function(){
 					if(xhr.status === 200){
 						data = JSON.parse(xhr.responseText);
 						
-						msg.textContent = data['res'];
+						msg.innerHTML = '<p class=' + data['class'] + '>'  + data['res'] + '</p>';
 						
 					}
 				}

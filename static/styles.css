@@ -63,7 +63,7 @@ input[type='button'] {
 	}
 
 .fail {
-	color: orange;
+	color: red;
 	font-weight: bold;
 	}
 

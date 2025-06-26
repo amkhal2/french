@@ -199,8 +199,11 @@ def find_record():
     # when user clicks the find button
     data = request.get_json()
     db_id = int(data["id"])
-    result = French.query.filter_by(id=db_id).first()    
-    to_client = [result.word, result.cat, result.meaning, result.id] 
+    try:
+        result = French.query.filter_by(id=db_id).first()    
+        to_client = [result.word, result.cat, result.meaning, result.id] 
+    except Exception as e:
+        to_client = [str(e)]
 
         
     return jsonify({'res': to_client})
@@ -215,12 +218,17 @@ def update_record():
     meaning = data['meaning']
     word_u = unidecode(word)
     meaning_u = unidecode(meaning)
-    
-    db.engine.execute('update French set word = ?, cat = ?, meaning = ?, word_unaccented=?, meaning_unaccented=?  where id = ?',
+    try:
+        db.engine.execute('update French set word = ?, cat = ?, meaning = ?, word_unaccented=?, meaning_unaccented=?  where id = ?',
                             (word, cat, meaning, word_u, meaning_u , id))
-    return jsonify({
-        'res': 'Record updated Successfully!'
+        return jsonify({
+        'res': 'Record updated Successfully!', 'class': 'success'
          })
+    except Exception as e:
+        return jsonify({
+        'res': str(e)[:49], 'class': 'fail'
+         })
+
    
 if __name__ == "__main__":
     app.run(debug=True)
