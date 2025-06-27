@@ -144,8 +144,9 @@ def search_Database():
     
     if data["userInput"].strip() and len(data["userInput"].strip()) > 1: 
         results = French.query.filter(French.word_unaccented.like(f'%{unidecode(data["userInput"])}%') | French.meaning_unaccented.like(f'%{unidecode(data["userInput"])}%')).all()
-        
-        l = [[i.id, i.word, i.cat, i.meaning] for i in results]
+               
+        l = [[i.id, i.word.replace(data["userInput"],f'<i class="searching">{data["userInput"]}</i>'),
+        i.cat, i.meaning.replace(data["userInput"],f'<i class="searching">{data["userInput"]}</i>')] for i in results]
         if l:
             return jsonify({"res": l, 'status':'success'})
         

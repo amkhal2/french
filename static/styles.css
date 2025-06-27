@@ -56,7 +56,10 @@ input[type='button'] {
 #check {
 	margin-left:50px
 }
-
+.searching {
+	background-color: yellow;
+	color: black;
+}
 .success {
 	color: #05a30d;
 	font-weight: bold;
