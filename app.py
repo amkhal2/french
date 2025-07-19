@@ -128,10 +128,10 @@ def get_quiz():
         "question": question,
         "questionID": questionID,
         "answers": [
-                {'answer_id': sample[0].id, 'answer': sample[0].meaning},
-                {'answer_id': sample[1].id, 'answer': sample[1].meaning},
-                {'answer_id': sample[2].id, 'answer': sample[2].meaning},
-                {'answer_id': sample[3].id, 'answer': sample[3].meaning}
+                {'answer_id': sample[0].id, 'answer': sample[0].meaning.split('\n')[0]},
+                {'answer_id': sample[1].id, 'answer': sample[1].meaning.split('\n')[0]},
+                {'answer_id': sample[2].id, 'answer': sample[2].meaning.split('\n')[0]},
+                {'answer_id': sample[3].id, 'answer': sample[3].meaning.split('\n')[0]}
             ]
         }
     
